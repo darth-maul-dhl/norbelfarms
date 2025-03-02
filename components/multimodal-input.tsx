@@ -23,7 +23,7 @@ import { useLocalStorage, useWindowSize } from 'usehooks-ts';
 
 import { sanitizeUIMessages } from '@/lib/utils';
 
-import { ArrowUpIcon, PaperclipIcon, StopIcon } from './icons';
+import { ArrowUpIcon, PaperclipIcon, StopIcon, MicIcon } from './icons';
 import { PreviewAttachment } from './preview-attachment';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
@@ -67,6 +67,8 @@ function PureMultimodalInput({
 }) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { width } = useWindowSize();
+  const [isListening, setIsListening] = useState(false);
+  const recognitionRef = useRef<any>(null);
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -109,10 +111,74 @@ function PureMultimodalInput({
     setLocalStorageInput(input);
   }, [input, setLocalStorageInput]);
 
+  useEffect(() => {
+    // Cleanup speech recognition on unmount
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+    };
+  }, []);
+
   const handleInput = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInput(event.target.value);
     adjustHeight();
   };
+
+  const toggleSpeechRecognition = useCallback(() => {
+    // Check for browser support
+    if (!('webkitSpeechRecognition' in window)) {
+      toast.error('Voice mode is not supported in your browser');
+      return;
+    }
+
+    if (isListening) {
+      // Stop listening
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+      return;
+    }
+
+    // Start listening
+    try {
+      const SpeechRecognition = window.webkitSpeechRecognition;
+      recognitionRef.current = new SpeechRecognition();
+      const recognition = recognitionRef.current;
+      
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = 'en-US';
+
+      recognition.onstart = () => {
+        setIsListening(true);
+        toast.success('Listening...');
+      };
+
+      recognition.onresult = (event: any) => {
+        const transcript = event.results[0][0].transcript;
+        setInput((prev) => {
+          const newValue = prev ? `${prev} ${transcript}` : transcript;
+          setTimeout(adjustHeight, 0);
+          return newValue;
+        });
+      };
+
+      recognition.onerror = (event: any) => {
+        toast.error(`Error: ${event.error}`);
+        setIsListening(false);
+      };
+
+      recognition.onend = () => {
+        setIsListening(false);
+      };
+
+      recognition.start();
+    } catch (error) {
+      toast.error('Error initializing speech recognition');
+      setIsListening(false);
+    }
+  }, [isListening, setInput]);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadQueue, setUploadQueue] = useState<Array<string>>([]);
@@ -256,6 +322,11 @@ function PureMultimodalInput({
 
       <div className="absolute bottom-0 p-2 w-fit flex flex-row justify-start">
         <AttachmentsButton fileInputRef={fileInputRef} isLoading={isLoading} />
+        <MicrophoneButton 
+          isListening={isListening} 
+          toggleSpeechRecognition={toggleSpeechRecognition} 
+          isLoading={isLoading} 
+        />
       </div>
 
       <div className="absolute bottom-0 right-0 p-2 w-fit flex flex-row justify-end">
@@ -307,6 +378,35 @@ function PureAttachmentsButton({
 }
 
 const AttachmentsButton = memo(PureAttachmentsButton);
+
+function PureMicrophoneButton({
+  isListening,
+  toggleSpeechRecognition,
+  isLoading,
+}: {
+  isListening: boolean;
+  toggleSpeechRecognition: () => void;
+  isLoading: boolean;
+}) {
+  return (
+    <Button
+      className={cx(
+        "rounded-md p-[7px] h-fit dark:border-zinc-700 hover:dark:bg-zinc-900 hover:bg-zinc-200",
+        isListening && "bg-red-100 text-red-500 dark:bg-red-900 dark:text-red-300"
+      )}
+      onClick={(event) => {
+        event.preventDefault();
+        toggleSpeechRecognition();
+      }}
+      disabled={isLoading}
+      variant="ghost"
+    >
+      <MicIcon size={14} />
+    </Button>
+  );
+}
+
+const MicrophoneButton = memo(PureMicrophoneButton);
 
 function PureStopButton({
   stop,

@@ -552,6 +552,33 @@ export const StopIcon = ({ size = 16 }: { size?: number }) => {
   );
 };
 
+export const MicIcon = ({ size = 16 }: { size?: number }) => {
+  return (
+    <svg
+      height={size}
+      viewBox="0 0 16 16"
+      width={size}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+    >
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M8 1a2 2 0 0 0-2 2v4.667a2 2 0 0 0 4 0V3a2 2 0 0 0-2-2z"
+        fill="currentColor"
+      />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M12.667 6.667v1.333a4.667 4.667 0 0 1-9.334 0V6.667"
+      />
+      <line x1="8" y1="12.667" x2="8" y2="15.333"></line>
+      <line x1="5.333" y1="15.333" x2="10.667" y2="15.333"></line>
+    </svg>
+  );
+}
+
 export const PaperclipIcon = ({ size = 16 }: { size?: number }) => {
   return (
     <svg
