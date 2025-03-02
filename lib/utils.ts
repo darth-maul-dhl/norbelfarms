@@ -220,6 +220,68 @@ export function getMostRecentUserMessage(messages: Array<Message>) {
   return userMessages.at(-1);
 }
 
+export async function getWeatherData(message: Message) {
+  const text = message.content.toLowerCase();
+  let lat: number, lon: number;
+
+  if (text.includes("illinois")) {
+    lat = 40.8651;
+    lon = -88.6693;
+  } else { // itll default to north dakota
+    lat = 46.8719;
+    lon = -97.2793;
+  }
+  let date: string;
+  const numericDateRegex = /(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4})/;
+  const textualDateRegex = /(\b(?:january|february|march|april|may|june|july|august|september|october|november|december)\b\s+\d{1,2},?\s+\d{4})/i;
+  
+  const numericMatch = text.match(numericDateRegex);
+  const textualMatch = text.match(textualDateRegex);
+
+  if (numericMatch) {
+    date = numericMatch[0];
+  } else if (textualMatch) {
+    date = textualMatch[0];
+  } else {
+    date = "2025-03-02";
+  }
+  
+  const parsedDate = new Date(date);
+  if (isNaN(parsedDate.getTime())) {
+    date = "2025-03-02";
+  }
+
+  const apiKey = process.env.OPENWEATHER_API_KEY;
+  let url: string;
+  if (date === "2025-03-02") {
+    url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
+  } else {
+    url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
+  }
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error("Failed to fetch weather data");
+    }
+    const data = await response.json();
+    if (url.includes("forecast") && date !== "2025-03-02") {
+      const targetDate = new Date(date).toISOString().split("T")[0];
+      const filteredForecast = data.list.filter((item: any) =>
+        item.dt_txt && item.dt_txt.startsWith(targetDate)
+      );
+      data.filteredForecast = filteredForecast;
+    }
+    return data;
+  } catch (error: any) {
+    return { error: error.message };
+  }
+}
+
+export async function getRestrictions(message: Message) {
+  const text = message.content
+}
+
 export function getDocumentTimestampByIndex(
   documents: Array<Document>,
   index: number,

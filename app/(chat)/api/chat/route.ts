@@ -16,7 +16,9 @@ import {
 } from '@/lib/db/queries';
 import {
   generateUUID,
+  getCurrentWeatherData,
   getMostRecentUserMessage,
+  getWeatherData,
   sanitizeResponseMessages,
 } from '@/lib/utils';
 
@@ -46,6 +48,11 @@ export async function POST(request: Request) {
 
   if (!userMessage) {
     return new Response('No user message found', { status: 400 });
+  }
+
+  const weatherResult = await getWeatherData(userMessage);
+  if (weatherResult && !weatherResult.error) {
+    userMessage.content += "\n\nThe weather date for this day is: " + JSON.stringify(weatherResult);
   }
 
   const chat = await getChatById({ id });
