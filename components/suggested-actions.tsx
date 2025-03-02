@@ -16,26 +16,37 @@ interface SuggestedActionsProps {
 function PureSuggestedActions({ chatId, append }: SuggestedActionsProps) {
   const suggestedActions = [
     {
-      title: 'What are the advantages',
-      label: 'of using Next.js?',
-      action: 'What are the advantages of using Next.js?',
+      title: 'Generate a tillage recommendation',
+      label: 'for a given field',
+      action: 'Generate a tillage recommendation for a given field based on soil type and cost considerations.',
     },
     {
-      title: 'Write code to',
-      label: `demonstrate djikstra's algorithm`,
-      action: `Write code to demonstrate djikstra's algorithm`,
+      title: 'Estimate tillage cost',
+      label: 'for a farm in Illinois',
+      action: 'Estimate the tillage cost for a farm in Illinois using available equipment options.',
     },
     {
-      title: 'Help me write an essay',
-      label: `about silicon valley`,
-      action: `Help me write an essay about silicon valley`,
+      title: 'Compare tillage methods',
+      label: 'for different soil types',
+      action: 'Compare different tillage methods and their suitability for various soil types.',
     },
     {
-      title: 'What is the weather',
-      label: 'in San Francisco?',
-      action: 'What is the weather in San Francisco?',
+      title: 'Get real-time weather',
+      label: 'for PTI North Dakota',
+      action: 'Fetch real-time weather data for PTI North Dakota to assess farming conditions.',
     },
-  ];
+    {
+      title: 'Suggest best equipment',
+      label: 'for minimum soil disturbance',
+      action: 'Suggest the best farming equipment for minimum soil disturbance and conservation tillage.',
+    },
+    {
+      title: 'Analyze soil moisture',
+      label: 'impact on tillage decisions',
+      action: 'Analyze how soil moisture levels affect tillage decisions and crop yield.',
+    },
+];
+
 
   return (
     <div className="grid sm:grid-cols-2 gap-2 w-full">
