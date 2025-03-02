@@ -25,6 +25,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 import { MessageEditor } from './message-editor';
 import { DocumentPreview } from './document-preview';
 import { MessageReasoning } from './message-reasoning';
+import FarmVisualization from './farm-visualization';
 
 const PurePreviewMessage = ({
   chatId,
@@ -119,6 +120,11 @@ const PurePreviewMessage = ({
                   })}
                 >
                   <Markdown>{message.content as string}</Markdown>
+                  {message.role === 'assistant' && (
+                    <div className="mt-2">
+                      <FarmVisualization content={message.content}/>
+                    </div>
+                  )}
                 </div>
               </div>
             )}

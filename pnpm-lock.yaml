@@ -71,6 +71,12 @@ importers:
       ai:
         specifier: 4.1.44
         version: 4.1.44(react@19.0.0-rc-45804af1-20241021)(zod@3.23.8)
+      babylonjs:
+        specifier: ^7.51.1
+        version: 7.51.1
+      babylonjs-loaders:
+        specifier: ^7.51.1
+        version: 7.51.1
       bcrypt-ts:
         specifier: ^5.0.2
         version: 5.0.2
@@ -1758,6 +1764,15 @@ packages:
   axobject-query@4.1.0:
     resolution: {integrity: sha512-qIj0G9wZbMGNLjLmg1PT6v2mE9AH2zlnADJD/2tC6E00hgmhUOfEB6greHPAfLRSufHqROIUTkw6E+M3lH0PTQ==}
     engines: {node: '>= 0.4'}
+
+  babylonjs-gltf2interface@7.51.1:
+    resolution: {integrity: sha512-JwBQfdlGdz6gyFeIrCnzvf/YnWeSMk9UUJVtGIxXpBKuB1R38zmL8AEhEgpwxfRZfYgCP/iwLnd0p1LzVhfE6g==}
+
+  babylonjs-loaders@7.51.1:
+    resolution: {integrity: sha512-rZG3QIdwEqqiiKKiFEKX5vIMiDQvYdpWKaF+eRw2X62X5na+Dn3dtfaPsdA34/Q1CsV0o05a97SKF23m35iB3g==}
+
+  babylonjs@7.51.1:
+    resolution: {integrity: sha512-EauweM4ToAehokmR+qa6M6lxR1WxP7Mg7qJ4MdpJvIciuU+htLtInsd5Cdw1BDwbn/N7Nlm+NCyXNLrv4sXgGw==}
 
   bail@2.0.2:
     resolution: {integrity: sha512-0xO6mYd7JB2YesxDKplafRpsiOzPt9V02ddPCLbY1xYGPOX24NTyN50qnUxgCPcSoYMhKpAuBTjQoRZCAkUDRw==}
@@ -5075,6 +5090,15 @@ snapshots:
   axe-core@4.10.2: {}
 
   axobject-query@4.1.0: {}
+
+  babylonjs-gltf2interface@7.51.1: {}
+
+  babylonjs-loaders@7.51.1:
+    dependencies:
+      babylonjs: 7.51.1
+      babylonjs-gltf2interface: 7.51.1
+
+  babylonjs@7.51.1: {}
 
   bail@2.0.2: {}
 

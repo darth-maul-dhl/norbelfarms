@@ -121,7 +121,8 @@ In your response:
 2. Give the total working time based on the statistics given.
 3. Keep responses concise yet informative.
 4. Use the images for the plots of the land provided (illinois and dakota), and based on the coordinates for the plots given, give the locations where we till and stuff.
-5. Don't write latex math calculations, write them directly.
+5. At the end, give a conclusive singular recommendation for the farmer to follow and called it "RECOMMENDED APPROACH: ", which has the recommended equipment, cost, and time.
+6. Don't write latex math calculations, write them directly.
 ;`
 
 
